@@ -1,6 +1,5 @@
 streamlit
 spacy
-nltk
 matplotlib
 seaborn
 plotly
