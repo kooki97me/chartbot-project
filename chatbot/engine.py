@@ -8,7 +8,7 @@ nlp = spacy.load("en_core_web_sm")
 # Ensure NLTK 'punkt' tokenizer data is available
 try:
     nltk.data.find('tokenizers/punkt')
-except nltk.downloader.DownloadError:
+except LookupError:
     nltk.download('punkt', quiet=True) # quiet=True suppresses verbose output
 
 def respond_spacy(text):
