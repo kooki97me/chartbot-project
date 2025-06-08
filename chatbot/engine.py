@@ -5,16 +5,17 @@ import nltk
 # The spaCy model 'en_core_web_sm' should be installed via requirements.txt
 nlp = spacy.load("en_core_web_sm")
 
-# Download necessary NLTK data (e.g., 'punkt' for tokenization) if you haven't already.
-# You might run this once in your environment or include it in a setup script:
-# import nltk
-# nltk.download('punkt')
+# Ensure NLTK 'punkt' tokenizer data is available
+try:
+    nltk.data.find('tokenizers/punkt')
+except nltk.downloader.DownloadError:
+    nltk.download('punkt', quiet=True) # quiet=True suppresses verbose output
 
 def respond_spacy(text):
     doc = nlp(text)
     tokens = nltk.word_tokenize(text)
     return f"You said: \"{text}\" (Processed with spaCy). NLTK tokens: {tokens}"
-    
+
 def respond_openai(text, api_key):
     if not api_key:
         return "OpenAI API key not provided. Please enter it in the sidebar."
