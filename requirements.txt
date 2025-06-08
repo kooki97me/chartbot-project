@@ -1,0 +1,7 @@
+streamlit
+nltk
+spacy
+matplotlib
+seaborn
+plotly
+openai
