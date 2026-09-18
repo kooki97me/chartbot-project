@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 import pandas as pd
 
@@ -10,85 +9,121 @@ from charts.visualize import (
 )
 
 
-st.title("Chatbot with Analytics")
+st.set_page_config(
+    page_title="Chatbot with Analytics",
+    page_icon="📊",
+    layout="wide",
+)
 
-# Sidebar for API Key and engine selection
+
+st.title("Chatbot with Analytics")
+st.write("A simple chatbot with data visualization using Python.")
+
+
+# -------------------------
+# Sidebar Settings
+# -------------------------
+
 st.sidebar.header("Chatbot Settings")
 
 openai_api_key = st.sidebar.text_input(
     "OpenAI API Key",
-    type="password"
+    type="password",
 )
 
 use_openai_cb = st.sidebar.checkbox(
     "Use OpenAI for responses",
-    value=False
+    value=False,
 )
 
 
-# Prepare sample data for charts
-chart_df = pd.DataFrame({
-    "x_numeric": [1, 2, 3, 4, 5, 6, 7, 8],
-    "y_values_A": [10, 12, 15, 13, 17, 18, 20, 19],
-    "y_values_B": [5, 7, 6, 8, 7, 9, 10, 8],
-    "category": [
-        "Alpha",
-        "Beta",
-        "Alpha",
-        "Gamma",
-        "Beta",
-        "Alpha",
-        "Gamma",
-        "Beta",
-    ],
-})
+# -------------------------
+# Sample Data
+# -------------------------
+
+chart_df = pd.DataFrame(
+    {
+        "x_numeric": [1, 2, 3, 4, 5, 6, 7, 8],
+        "y_values_A": [10, 12, 15, 13, 17, 18, 20, 19],
+        "y_values_B": [5, 7, 6, 8, 7, 9, 10, 8],
+        "category": [
+            "Alpha",
+            "Beta",
+            "Alpha",
+            "Gamma",
+            "Beta",
+            "Alpha",
+            "Gamma",
+            "Beta",
+        ],
+    }
+)
 
 
+# -------------------------
 # Chatbot
-user_input = st.text_input("You:", "")
+# -------------------------
+
+st.header("Chatbot")
+
+user_input = st.text_input(
+    "You:",
+    placeholder="Type your message here...",
+)
+
 
 if user_input:
+
     if use_openai_cb:
+
         if openai_api_key:
             response = respond_openai(
                 user_input,
-                openai_api_key
+                openai_api_key,
             )
         else:
             response = (
-                "Please enter your OpenAI API Key in the sidebar "
-                "to use the OpenAI engine."
+                "Please enter your OpenAI API Key "
+                "in the sidebar to use the OpenAI engine."
             )
+
     else:
         response = respond_spacy(user_input)
 
-    st.write("Bot:", response)
+    st.write("**Bot:**", response)
 
 
-# Analytics Visualizations
+# -------------------------
+# Analytics
+# -------------------------
+
 st.header("Analytics Visualizations")
 
 chart_type = st.selectbox(
     "Select Chart Type:",
-    (
+    [
         "Matplotlib Line Plot",
         "Seaborn Scatter Plot",
         "Plotly Bar Chart",
-    ),
+    ],
 )
 
 
 if st.button(f"Show {chart_type}"):
 
     if chart_type == "Matplotlib Line Plot":
+
         display_matplotlib_chart(
             x_data=chart_df["x_numeric"],
             y_data=chart_df["y_values_A"],
             title="Matplotlib: Numeric X vs Y Values A",
+            x_label="X",
+            y_label="Y Values A",
             legend_label="Y Values A",
         )
 
     elif chart_type == "Seaborn Scatter Plot":
+
         display_seaborn_scatterplot(
             df=chart_df,
             x_col="x_numeric",
@@ -98,7 +133,7 @@ if st.button(f"Show {chart_type}"):
         )
 
     elif chart_type == "Plotly Bar Chart":
-        # Aggregate y_values_B by category
+
         aggregated_df = (
             chart_df
             .groupby("category")["y_values_B"]
@@ -112,4 +147,3 @@ if st.button(f"Show {chart_type}"):
             y_col="y_values_B",
             title="Plotly: Sum of Y Values B by Category",
         )
-```
